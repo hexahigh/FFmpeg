@@ -274,15 +274,19 @@ jobs:
     - name: Download binaries
       uses: actions/download-artifact@v3
       with:
-        path: /tmp/f_build_lib_2
+        path: /tmp/f_build_bin_2
 
     - name: Move binaries
       run: |
-        mkdir /tmp/f_build_lib/
-        find /tmp/f_build_lib_2 -type f -print0 | xargs -0 mv -t /tmp/f_build_lib
+        mkdir /tmp/f_build_bin/
+        find /tmp/f_build_bin_2 -type f -print0 | xargs -0 mv -t /tmp/f_build_bin
+        export PATH="/tmp/f_build_bin:$PATH"
 
     - name: list lib directory
       run: ls -R /tmp/f_build_lib/
+
+    - name: list bin directory
+      run: ls -R /tmp/f_build_bin/
 
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev libass-dev nasm yasm
