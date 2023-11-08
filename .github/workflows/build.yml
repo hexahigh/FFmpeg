@@ -261,7 +261,9 @@ jobs:
         path: /tmp/f_build_lib_2
 
     - name: Move libs
-      run: mv /tmp/f_build_lib_2/**/* /tmp/f_build_lib/
+      run: |
+        mkdir /tmp/f_build_lib/
+        mv /tmp/f_build_lib_2/**/* /tmp/f_build_lib/
 
     - name: list lib directory
       run: ls -R /tmp/f_build_lib/
