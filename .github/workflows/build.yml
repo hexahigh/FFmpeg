@@ -21,6 +21,29 @@ jobs:
         ./configure
         make
         sudo make install
+          build-nasm:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
+
+    - name: Build NASM
+      run: |
+        wget https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+        tar xzvf nasm-2.15.05.tar.gz
+        cd nasm-2.15.05
+        ./configure
+        make
+        sudo make install
+
+    - name: Upload NASM binary
+      uses: actions/upload-artifact@v2
+      with:
+        name: nasm
+        path: /usr/local/bin/nasm
 
   build-yasm:
     runs-on: ubuntu-latest
@@ -68,6 +91,12 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
 
+    - name: Download NASM binary
+      uses: actions/download-artifact@v2
+      with:
+        name: nasm
+        path: /usr/local/bin
+
     - name: Build libx264
       run: |
         git clone https://code.videolan.org/videolan/x264.git
@@ -85,6 +114,12 @@ jobs:
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config cmake mercurial
+
+    - name: Download NASM binary
+      uses: actions/download-artifact@v2
+      with:
+        name: nasm
+        path: /usr/local/bin
 
     - name: Build libx265
       run: |
