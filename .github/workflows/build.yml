@@ -227,7 +227,7 @@ jobs:
       run: ls /tmp/f_build_lib/
 
     - name: Install dependencies
-      run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev nasm yasm
+      run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev libass-dev nasm yasm
 
     - name: Build FFmpeg
       run: |
@@ -235,7 +235,7 @@ jobs:
           --prefix=/tmp/f_build \
           --extra-ldflags="-L/tmp/f_build_lib/" \
           --enable-gpl \
-          --enable-gnutls \
+          --enable-libass \
           --enable-nonfree \
           --enable-libx264 \
           --enable-libx265 \
