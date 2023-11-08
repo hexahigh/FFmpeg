@@ -235,6 +235,7 @@ jobs:
           --prefix=/tmp/f_build \
           --extra-ldflags="-L/tmp/f_build_lib/" \
           --enable-gpl \
+          --enable-gnutls \
           --enable-nonfree \
           --enable-libx264 \
           --enable-libx265 \
