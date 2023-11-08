@@ -239,27 +239,13 @@ jobs:
           --enable-libvorbis 
         make
         sudo make install
-        
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Release to GitHub
+      uses: ncipollo/release-action@v1
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
+        name: Latest Autobuild
+        tag: latest_auto
+        commit: main
+        body: ${{ github.event.head_commit.message }}
+        artifacts: "/tmp/f_build/ffplay, /tmp/f_build/ffprove, /tmp/f_build/ffmpeg,"
         prerelease: false
-
-    - name: Upload Release Asset
-      id: upload_release_asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: /tmp/f_build/bin/ffmpeg
-        asset_name: ffmpeg
-        asset_content_type: application/octet-stream
-
-
