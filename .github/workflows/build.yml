@@ -1,6 +1,10 @@
 name: Build FFmpeg and dependencies
 
-on: [push, workflow_dispatch]
+on: 
+  push:
+  workflow_dispatch:
+  schedule:
+    - cron: 0 0 * * *
 
 jobs:
   build-libx264:
@@ -16,7 +20,7 @@ jobs:
       run: |
         git clone https://code.videolan.org/videolan/x264.git
         cd x264
-        ./configure --enable-static --prefix="$HOME/build"
+        ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
         
@@ -24,7 +28,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.3
       with:
         name: libx264
-        path: /home/runner/build/lib/*
+        path: /tmp/f_build/lib/*
 
   build-libx265:
     runs-on: ubuntu-latest
@@ -43,6 +47,12 @@ jobs:
         make
         sudo make install
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libx265
+        path: /tmp/f_build/lib/*
+
   build-libvpx:
     runs-on: ubuntu-latest
     steps:
@@ -59,6 +69,12 @@ jobs:
         ./configure --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
         make
         sudo make install
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libvpx
+        path: /tmp/f_build/lib/*
 
   build-libfdk-aac:
     runs-on: ubuntu-latest
@@ -78,6 +94,12 @@ jobs:
         make
         sudo make install
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libfdk-aac
+        path: /tmp/f_build/lib/*
+
   build-libmp3lame:
     runs-on: ubuntu-latest
     steps:
@@ -96,6 +118,12 @@ jobs:
         make
         sudo make install
 
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libmp3
+        path: /tmp/f_build/lib/*
+
   build-libopus:
     runs-on: ubuntu-latest
     steps:
@@ -110,9 +138,15 @@ jobs:
         wget https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
         tar xzvf opus-1.3.1.tar.gz
         cd opus-1.3.1
-        ./configure --enable-static
+        ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libopus
+        path: /tmp/f_build/lib/*
 
   build-libvorbis:
     runs-on: ubuntu-latest
@@ -128,9 +162,15 @@ jobs:
         wget http://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz
         tar xzvf libvorbis-1.3.7.tar.gz
         cd libvorbis-1.3.7
-        ./configure --enable-static
+        ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
+
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libvorbis
+        path: /tmp/f_build/lib/*
 
   build-ffmpeg:
     needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis]
@@ -141,14 +181,50 @@ jobs:
       with:
         repository: hexahigh/FFmpeg
 
-    - name: Download a Build Artifact
+    - name: Download libx264
       uses: actions/download-artifact@v2.1.1
       with:
         name: libx264
-        path: $HOME/ffmpeg_lib
+        path: /tmp/f_build/
+
+    - name: Download libx265
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libx265
+        path: /tmp/f_build/
+
+    - name: Download libvpx
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libvpx
+        path: /tmp/f_build/
+
+    - name: Download libfdk-aac
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libfdk-aac
+        path: /tmp/f_build/
+
+    - name: Download libmp3
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libmp3
+        path: /tmp/f_build/
+
+    - name: Download libopus
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libopus
+        path: /tmp/f_build/
+
+    - name: Download libvorbis
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libvorbis
+        path: /tmp/f_build/
 
     - name: list lib directory
-      run: ls $HOME/ffmpeg_lib
+      run: ls /tmp/f_build/
 
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev nasm yasm
@@ -157,7 +233,7 @@ jobs:
       run: |
         ./configure \
           --prefix=/usr/local \
-          --extra-ldflags="-L$HOME/ffmpeg_lib" \
+          --extra-ldflags="-L/tmp/f_build/" \
           --enable-gpl \
           --enable-nonfree \
           --enable-libx264 \
