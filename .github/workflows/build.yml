@@ -1,6 +1,6 @@
 name: Build FFmpeg and dependencies
 
-on: [push, pull_request]
+on: [push, workflow_dispatch]
 
 jobs:
   build-yasm:
