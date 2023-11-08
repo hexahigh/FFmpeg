@@ -16,9 +16,15 @@ jobs:
       run: |
         git clone https://code.videolan.org/videolan/x264.git
         cd x264
-        ./configure --enable-static
+        ./configure --enable-static --prefix="$HOME/build"
         make
         sudo make install
+        
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        name: libx264
+        path: $HOME/build
 
   build-libx265:
     runs-on: ubuntu-latest
@@ -135,6 +141,15 @@ jobs:
       with:
         repository: hexahigh/FFmpeg
 
+    - name: Download a Build Artifact
+      uses: actions/download-artifact@v2.1.1
+      with:
+        name: libx264
+        path: $HOME/ffmpeg_lib
+
+    - name: list lib directory
+      run: ls $HOME/ffmpeg_lib
+
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev nasm yasm
 
@@ -142,6 +157,7 @@ jobs:
       run: |
         ./configure \
           --prefix=/usr/local \
+          --extra-ldflags="-L$HOME/ffmpeg_lib" \
           --enable-gpl \
           --enable-nonfree \
           --enable-libx264 \
