@@ -32,7 +32,7 @@ jobs:
     - name: Build libx265
       run: |
         git clone https://bitbucket.org/multicoreware/x265_git.git
-        cd x265/build/linux
+        cd x265_git/build/linux
         cmake -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX="/usr/local" -DENABLE_SHARED:bool=off ../../source
         make
         sudo make install
