@@ -3,6 +3,25 @@ name: Build FFmpeg and dependencies
 on: [push, workflow_dispatch]
 
 jobs:
+
+  build-nasm:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      
+    - name: Install dependencies
+      run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
+
+    - name: Build NASM
+      run: |
+        wget https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+        tar xzvf nasm-2.15.05.tar.gz
+        cd nasm-2.15.05
+        ./configure
+        make
+        sudo make install
+
   build-yasm:
     runs-on: ubuntu-latest
     steps:
@@ -22,6 +41,7 @@ jobs:
         sudo make install
 
   build-libx264:
+    needs: build-nasm
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -39,6 +59,7 @@ jobs:
         sudo make install
 
   build-libx265:
+    needs: build-nasm
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
