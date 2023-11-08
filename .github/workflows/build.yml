@@ -171,6 +171,7 @@ jobs:
       run: |
           sudo mv libogg-artifact/* /usr/local/lib
           sudo ldconfig
+          sudo ls /usr/local/lib
 
     - name: Build libvorbis
       run: |
