@@ -66,7 +66,7 @@ jobs:
       run: |
         git clone https://chromium.googlesource.com/webm/libvpx
         cd libvpx
-        ./configure --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm
+        ./configure --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm --prefix="/tmp/f_build"
         make
         sudo make install
 
@@ -90,7 +90,7 @@ jobs:
         git clone https://github.com/mstorsjo/fdk-aac
         cd fdk-aac
         autoreconf -fiv
-        ./configure --disable-shared
+        ./configure --disable-shared --prefix="/tmp/f_build"
         make
         sudo make install
 
@@ -114,7 +114,7 @@ jobs:
         wget https://downloads.sourceforge.net/project/lame/lame/3.100/lame-3.100.tar.gz
         tar xzvf lame-3.100.tar.gz
         cd lame-3.100
-        ./configure --enable-nasm --disable-shared
+        ./configure --enable-nasm --disable-shared --prefix="/tmp/f_build"
         make
         sudo make install
 
