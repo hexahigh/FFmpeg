@@ -126,27 +126,8 @@ jobs:
         make
         sudo make install
 
-  build-libtheora:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
-    - name: Install dependencies
-      run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev
-
-    - name: Build libtheora
-      run: |
-        wget http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz
-        tar xzvf libtheora-1.1.1.tar.gz
-        cd libtheora-1.1.1
-        ./configure --enable-static
-        make
-        sudo make install
-
-
   build-ffmpeg:
-    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis, build-libtheora]
+    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout FFmpeg code
