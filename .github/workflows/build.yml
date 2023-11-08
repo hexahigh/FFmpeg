@@ -16,7 +16,7 @@ jobs:
       run: |
         git clone https://code.videolan.org/videolan/x264.git
         cd x264
-        ./configure --enable-static --prefix="$HOME/build"
+        ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
         
@@ -24,7 +24,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.3
       with:
         name: libx264
-        path: $HOME/build
+        path: /tmp/f_build
 
   build-libx265:
     runs-on: ubuntu-latest
