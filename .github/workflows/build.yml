@@ -263,7 +263,7 @@ jobs:
     - name: Move libs
       run: |
         mkdir /tmp/f_build_lib/
-        mv /tmp/f_build_lib_2/**/* /tmp/f_build_lib/
+        find /tmp/f_build_lib_2 -type f -print0 | xargs -0 mv -t /tmp/f_build_lib
 
     - name: list lib directory
       run: ls -R /tmp/f_build_lib/
