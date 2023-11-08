@@ -205,54 +205,11 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: hexahigh/FFmpeg
-
-    - name: Download libvmaf
-      uses: actions/download-artifact@v2.1.1
+        
+    - name: Download libraries
+      uses: actions/download-artifact@v3
       with:
-        name: libvmaf
-        path: /tmp/f_build/
-
-    - name: Download libx264
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libx264
-        path: /tmp/f_build/
-
-    - name: Download libx265
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libx265
-        path: /tmp/f_build/
-
-    - name: Download libvpx
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libvpx
-        path: /tmp/f_build/
-
-    - name: Download libfdk-aac
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libfdk-aac
-        path: /tmp/f_build/
-
-    - name: Download libmp3
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libmp3
-        path: /tmp/f_build/
-
-    - name: Download libopus
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libopus
-        path: /tmp/f_build/
-
-    - name: Download libvorbis
-      uses: actions/download-artifact@v2.1.1
-      with:
-        name: libvorbis
-        path: /tmp/f_build_lib/
+        path: /tmp/f_build_lib
 
     - name: list lib directory
       run: ls /tmp/f_build_lib/
