@@ -24,7 +24,7 @@ jobs:
       uses: actions/upload-artifact@v3.1.3
       with:
         name: libx264
-        path: $HOME/build/lib/*
+        path: /home/runner/build/lib/*
 
   build-libx265:
     runs-on: ubuntu-latest
