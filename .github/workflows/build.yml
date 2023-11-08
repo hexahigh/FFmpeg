@@ -56,6 +56,7 @@ jobs:
         sudo make install
 
   build-libvpx:
+    needs: build-yasm
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
