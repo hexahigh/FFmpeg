@@ -198,7 +198,7 @@ jobs:
         path: /tmp/f_build/lib/*
 
   build-ffmpeg:
-    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis]
+    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis, build-libvmaf]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout FFmpeg code
