@@ -146,7 +146,7 @@ jobs:
 
 
   build-ffmpeg:
-    needs: [build-yasm, build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis, build-libtheora]
+    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis, build-libtheora]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout FFmpeg code
