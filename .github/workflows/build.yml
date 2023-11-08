@@ -172,7 +172,7 @@ jobs:
         name: libvorbis
         path: /tmp/f_build/lib/*
 
-build-libvmaf:
+  build-libvmaf:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
@@ -196,7 +196,6 @@ build-libvmaf:
       with:
         name: libvmaf
         path: /tmp/f_build/lib/*
-
 
   build-ffmpeg:
     needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis]
