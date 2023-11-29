@@ -15,6 +15,10 @@ jobs:
       with:
         repository: hexahigh/FFmpeg
 
+    - name: Add apt repos
+      run: |
+          sudo add-apt-repository universe
+
     - name: Install dependencies
       run: |
         sudo apt update
