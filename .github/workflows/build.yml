@@ -23,6 +23,8 @@ jobs:
       run: |
         sudo apt update
         sudo apt install -y \
+          nasm \
+          yasm \
           autoconf \
           automake \
           build-essential \
