@@ -68,8 +68,7 @@ jobs:
           --enable-libfdk-aac \
           --enable-libmp3lame \
           --enable-libopus \
-          --enable-libvorbis \
-          --enable-libsvtav1 
+          --enable-libvorbis
         make
         sudo make install
 
