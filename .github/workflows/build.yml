@@ -9,10 +9,7 @@ on:
 jobs:
   build-libx264:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
+    steps: 
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config nasm
       
@@ -24,21 +21,9 @@ jobs:
         make
         sudo make install
         
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libx264
-        path: /tmp/f_build/lib/*
-
-  build-libx265:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config cmake mercurial nasm
-
+    
     - name: Build libx265
       run: |
         git clone https://bitbucket.org/multicoreware/x265_git.git
@@ -47,18 +32,6 @@ jobs:
         make
         sudo make install
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libx265
-        path: /tmp/f_build/lib/*
-
-  build-libvpx:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config yasm
 
@@ -69,18 +42,6 @@ jobs:
         ./configure --disable-examples --disable-unit-tests --enable-vp9-highbitdepth --as=yasm --prefix="/tmp/f_build"
         make
         sudo make install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libvpx
-        path: /tmp/f_build/lib/*
-
-  build-libfdk-aac:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
@@ -93,18 +54,6 @@ jobs:
         ./configure --disable-shared --prefix="/tmp/f_build"
         make
         sudo make install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libfdk-aac
-        path: /tmp/f_build/lib/*
-
-  build-libmp3lame:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
@@ -117,18 +66,6 @@ jobs:
         ./configure --enable-nasm --disable-shared --prefix="/tmp/f_build"
         make
         sudo make install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libmp3
-        path: /tmp/f_build/lib/*
-
-  build-libopus:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config
@@ -141,18 +78,6 @@ jobs:
         ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libopus
-        path: /tmp/f_build/lib/*
-
-  build-libvorbis:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev nasm
@@ -165,18 +90,6 @@ jobs:
         ./configure --enable-static --prefix="/tmp/f_build"
         make
         sudo make install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libvorbis
-        path: /tmp/f_build/lib/*
-
-  build-libvmaf:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config ninja-build meson nasm yasm
@@ -190,18 +103,6 @@ jobs:
           meson setup -Denable_tests=false -Denable_docs=false --buildtype=release --default-library=static .. --prefix "/tmp/f_build" --bindir="/tmp/f_build/bin" --libdir="/tmp/f_build/lib" && \
           ninja && \
           ninja install
-
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libvmaf
-        path: /tmp/f_build/lib/*
-
-  build-libsvtav1:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config ninja-build meson nasm yasm
@@ -215,34 +116,10 @@ jobs:
           PATH="$HOME/bin:$PATH" make && \
           make install
 
-    - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v3.1.3
-      with:
-        name: libsvtav1
-        path: /tmp/f_build/lib/*
-
-  build-ffmpeg:
-    needs: [build-libx264, build-libx265, build-libvpx, build-libfdk-aac, build-libmp3lame, build-libopus, build-libvorbis, build-libvmaf, build-libsvtav1]
-    runs-on: ubuntu-latest
-    steps:
     - name: Checkout FFmpeg code
       uses: actions/checkout@v2
       with:
         repository: hexahigh/FFmpeg
-        
-    - name: Download libraries
-      uses: actions/download-artifact@v3
-      with:
-        path: /tmp/f_build_lib_2
-
-    - name: Move libs
-      run: |
-        mkdir /tmp/f_build_lib/
-        find /tmp/f_build_lib_2 -type f -print0 | xargs -0 mv -t /tmp/f_build_lib
-        export PATH="/tmp/f_build_lib:$PATH"
-
-    - name: list lib directory
-      run: ls -R /tmp/f_build_lib/
 
     - name: Install dependencies
       run: sudo apt-get install -y autoconf automake build-essential libtool pkg-config libogg-dev libass-dev nasm yasm
@@ -251,7 +128,6 @@ jobs:
       run: |
         ./configure \
           --prefix=/tmp/f_build \
-          --extra-ldflags="-L/tmp/f_build_lib" \
           --ld="g++" \
           --enable-libvmaf \
           --enable-gpl \
