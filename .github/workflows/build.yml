@@ -51,7 +51,9 @@ jobs:
           libmp3lame-dev \
           libfdk-aac-dev \
           libvpx-dev \
-          libass-dev
+          libass-dev \
+          libvmaf-dev \
+          libjxl-dev
 
     - name: Build FFmpeg
       run: |
@@ -68,7 +70,8 @@ jobs:
           --enable-libfdk-aac \
           --enable-libmp3lame \
           --enable-libopus \
-          --enable-libvorbis
+          --enable-libvorbis \
+          --enable-libjxl
         make
         sudo make install
 
