@@ -95,7 +95,6 @@ jobs:
          librsvg2-dev \
          libmfx-dev \
          libdrm-dev \
-         libiec61883-dev \
          libplacebo-dev \
          libsvtav1-dev
 
@@ -157,7 +156,6 @@ jobs:
         --enable-librsvg \
         --enable-libmfx \
         --enable-libdrm \
-        --enable-libiec61883 \
         --enable-libx264 \
         --enable-libplacebo \
         --enable-librav1e \
