@@ -29,6 +29,7 @@ jobs:
          yasm \
          autoconf \
          automake \
+         libaom-dev \
          build-essential \
          cmake \
          git-core \
