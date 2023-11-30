@@ -148,7 +148,6 @@ jobs:
         --enable-libzimg \
         --enable-libzmq \
         --enable-libzvbi \
-        --enable-lv2 \
         --enable-omx \
         --enable-openal \
         --enable-opengl \
