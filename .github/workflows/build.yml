@@ -13,9 +13,11 @@ jobs:
       with:
         repository: hexahigh/FFmpeg
 
-    - name: Add apt repos
+    - name: Install libjxl
       run: |
-          sudo add-apt-repository universe
+          wget -O jxl.tar.gz https://github.com/libjxl/libjxl/releases/download/v0.8.2/jxl-debs-amd64-ubuntu-22.04-v0.8.2.tar.gz
+          tar -zxf jxl.tar.gz -C ./jxl
+          sudo apt install -y ./jxl/*
 
     - name: Install dependencies
       run: |
