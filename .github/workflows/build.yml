@@ -17,7 +17,8 @@ jobs:
       run: |
           wget -O jxl.tar.gz https://github.com/libjxl/libjxl/releases/download/v0.8.2/jxl-debs-amd64-ubuntu-22.04-v0.8.2.tar.gz
           tar -zxf jxl.tar.gz
-          sudo apt install -y ./jxl/*
+          ls
+          sudo apt install -y ./jxl/*.deb
 
     - name: Install dependencies
       run: |
