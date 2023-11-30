@@ -75,7 +75,7 @@ jobs:
          libsnappy-dev \
          libsoxr-dev \
          libspeex-dev \
-         libsrt-dev \
+         libsrt-gnutls-dev \
          libssh-dev \
          libsvtav1-dev \
          libtheora-dev \
