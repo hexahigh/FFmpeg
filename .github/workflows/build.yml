@@ -13,6 +13,10 @@ jobs:
       with:
         repository: hexahigh/FFmpeg
 
+    - name: Set vars
+      run: |
+          git_hash=$(git rev-parse --short "$GITHUB_SHA")
+
     - name: Install libjxl
       run: |
           wget -O jxl.tar.gz https://github.com/libjxl/libjxl/releases/download/v0.8.2/jxl-debs-amd64-ubuntu-22.04-v0.8.2.tar.gz
@@ -52,8 +56,8 @@ jobs:
     - name: Release to GitHub
       uses: ncipollo/release-action@v1
       with:
-        name: Latest Autobuild
-        tag: latest_auto
+        name: Autobuild $git_hash
+        tag: auto_$git_hash
         commit: main
         body: ${{ github.event.head_commit.message }}
         artifacts: "/tmp/f_build/ffplay, /tmp/f_build/ffprove, /tmp/f_build/ffmpeg,"
