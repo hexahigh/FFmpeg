@@ -69,17 +69,6 @@ jobs:
         make
         sudo make install
 
-    - name: Create tag
-      uses: actions/github-script@v5
-      with:
-        script: |
-            github.rest.git.createRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: 'refs/tags/auto_$git_hash',
-              sha: context.sha
-            })
-
     - name: Delete old release and tag
       continue-on-error: true
       uses: dev-drprasad/delete-tag-and-release@v1.0.1
