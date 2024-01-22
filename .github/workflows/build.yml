@@ -57,7 +57,7 @@ jobs:
         --prefix=/tmp/f_build \
         --ld="g++" \
         --enable-gpl \
-        --enable-nonfree
+        --enable-nonfree \
         --disable-stripping \
         --enable-libjxl \
         --enable-libx265 \
