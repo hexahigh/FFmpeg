@@ -110,7 +110,6 @@ jobs:
         --enable-libaom \
         --enable-libass \
         --enable-libbluray \
-        --enable-libbs2b \
         --enable-libcaca \
         --enable-libcdio \
         --enable-libcodec2 \
