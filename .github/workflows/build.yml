@@ -99,7 +99,7 @@ jobs:
          libsvtav1-dev
 
     - name: uh
-      run: sudo apt install -y lib*
+      run: sudo apt install -y '~nlib.*'
 
     - name: Build FFmpeg
       run: |
