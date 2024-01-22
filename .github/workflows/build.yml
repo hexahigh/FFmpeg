@@ -157,8 +157,7 @@ jobs:
         --enable-libdrm \
         --enable-libx264 \
         --enable-libplacebo \
-        --enable-librav1e \
-
+        
         make
         sudo make install
 
