@@ -39,7 +39,17 @@ jobs:
          git-core \
          pkg-config \
          texinfo \
-         wget \
+         wget 
+
+    - name: Install libs
+      run: |
+          sudo apt install -y \
+          libx264-dev \
+          libx265-dev \
+          libnuma-dev \
+          libvpx-dev \
+          libopus-dev \
+          libdav1d-dev
 
     - name: Build FFmpeg
       run: |
@@ -47,8 +57,14 @@ jobs:
         --prefix=/tmp/f_build \
         --ld="g++" \
         --enable-gpl \
+        --enable-nonfree
         --disable-stripping \
         --enable-libjxl \
+        --enable-libx265 \
+        --enable-libx264 \
+        --enable libvpx \
+        --enable-libopus \
+        --enable-libdav1d
         
         make
         sudo make install
