@@ -81,6 +81,7 @@ jobs:
             })
 
     - name: Delete old release and tag
+      continue-on-error: true
       uses: dev-drprasad/delete-tag-and-release@v1.0.1
       with:
         delete_release: true
