@@ -1,4 +1,6 @@
-FATE_CHECKASM = fate-checkasm-aacpsdsp                                  \
+FATE_CHECKASM = fate-checkasm-aacencdsp                                 \
+                fate-checkasm-aacpsdsp                                  \
+                fate-checkasm-ac3dsp                                    \
                 fate-checkasm-af_afir                                   \
                 fate-checkasm-alacdsp                                   \
                 fate-checkasm-audiodsp                                  \
@@ -23,6 +25,7 @@ FATE_CHECKASM = fate-checkasm-aacpsdsp                                  \
                 fate-checkasm-huffyuvdsp                                \
                 fate-checkasm-idctdsp                                   \
                 fate-checkasm-jpeg2000dsp                               \
+                fate-checkasm-llauddsp                                  \
                 fate-checkasm-llviddsp                                  \
                 fate-checkasm-llviddspenc                               \
                 fate-checkasm-lpc                                       \
@@ -30,10 +33,12 @@ FATE_CHECKASM = fate-checkasm-aacpsdsp                                  \
                 fate-checkasm-opusdsp                                   \
                 fate-checkasm-pixblockdsp                               \
                 fate-checkasm-sbrdsp                                    \
+                fate-checkasm-svq1enc                                   \
                 fate-checkasm-synth_filter                              \
                 fate-checkasm-sw_gbrp                                   \
                 fate-checkasm-sw_rgb                                    \
                 fate-checkasm-sw_scale                                  \
+                fate-checkasm-takdsp                                    \
                 fate-checkasm-utvideodsp                                \
                 fate-checkasm-v210dec                                   \
                 fate-checkasm-v210enc                                   \

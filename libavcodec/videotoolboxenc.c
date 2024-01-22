@@ -119,6 +119,7 @@ static struct{
     CFStringRef kVTCompressionPropertyKey_TargetQualityForAlpha;
     CFStringRef kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality;
     CFStringRef kVTCompressionPropertyKey_ConstantBitRate;
+    CFStringRef kVTCompressionPropertyKey_EncoderID;
 
     CFStringRef kVTVideoEncoderSpecification_EnableHardwareAcceleratedVideoEncoder;
     CFStringRef kVTVideoEncoderSpecification_RequireHardwareAcceleratedVideoEncoder;
@@ -191,6 +192,7 @@ static void loadVTEncSymbols(void){
     GET_SYM(kVTCompressionPropertyKey_PrioritizeEncodingSpeedOverQuality,
             "PrioritizeEncodingSpeedOverQuality");
     GET_SYM(kVTCompressionPropertyKey_ConstantBitRate, "ConstantBitRate");
+    GET_SYM(kVTCompressionPropertyKey_EncoderID, "EncoderID");
 
     GET_SYM(kVTVideoEncoderSpecification_EnableHardwareAcceleratedVideoEncoder,
             "EnableHardwareAcceleratedVideoEncoder");
@@ -277,6 +279,41 @@ typedef struct VTEncContext {
     int power_efficient;
     int max_ref_frames;
 } VTEncContext;
+
+static int vt_dump_encoder(AVCodecContext *avctx)
+{
+    VTEncContext *vtctx = avctx->priv_data;
+    CFStringRef encoder_id = NULL;
+    int status;
+    CFIndex length, max_size;
+    char *name;
+
+    status = VTSessionCopyProperty(vtctx->session,
+                                   compat_keys.kVTCompressionPropertyKey_EncoderID,
+                                   kCFAllocatorDefault,
+                                   &encoder_id);
+    // OK if not supported
+    if (status != noErr)
+        return 0;
+
+    length = CFStringGetLength(encoder_id);
+    max_size = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
+    name = av_malloc(max_size);
+    if (!name) {
+        CFRelease(encoder_id);
+        return AVERROR(ENOMEM);
+    }
+
+    CFStringGetCString(encoder_id,
+                       name,
+                       max_size,
+                       kCFStringEncodingUTF8);
+    av_log(avctx, AV_LOG_DEBUG, "Init the encoder: %s\n", name);
+    av_freep(&name);
+    CFRelease(encoder_id);
+
+    return 0;
+}
 
 static int vtenc_populate_extradata(AVCodecContext   *avctx,
                                     CMVideoCodecType codec_type,
@@ -484,6 +521,8 @@ static CMVideoCodecType get_cm_codec_type(AVCodecContext *avctx,
         }
         return kCMVideoCodecType_HEVC;
     case AV_CODEC_ID_PRORES:
+        if (desc && (desc->flags & AV_PIX_FMT_FLAG_ALPHA))
+            avctx->bits_per_coded_sample = 32;
         switch (profile) {
         case AV_PROFILE_PRORES_PROXY:
             return MKBETAG('a','p','c','o'); // kCMVideoCodecType_AppleProRes422Proxy
@@ -1174,33 +1213,9 @@ static int vtenc_create_encoder(AVCodecContext   *avctx,
     }
 #endif
 
-    // Dump the init encoder
-    {
-        CFStringRef encoderID = NULL;
-        status = VTSessionCopyProperty(vtctx->session,
-                                       kVTCompressionPropertyKey_EncoderID,
-                                       kCFAllocatorDefault,
-                                       &encoderID);
-        if (status == noErr) {
-            CFIndex length   = CFStringGetLength(encoderID);
-            CFIndex max_size = CFStringGetMaximumSizeForEncoding(length, kCFStringEncodingUTF8);
-            char *name       = av_malloc(max_size);
-            if (!name) {
-                CFRelease(encoderID);
-                return AVERROR(ENOMEM);
-            }
-
-            CFStringGetCString(encoderID,
-                               name,
-                               max_size,
-                               kCFStringEncodingUTF8);
-            av_log(avctx, AV_LOG_DEBUG, "Init the encoder: %s\n", name);
-
-            av_freep(&name);
-        }
-        if (encoderID != NULL)
-            CFRelease(encoderID);
-    }
+    status = vt_dump_encoder(avctx);
+    if (status < 0)
+        return status;
 
     if (avctx->flags & AV_CODEC_FLAG_QSCALE && !vtenc_qscale_enabled()) {
         av_log(avctx, AV_LOG_ERROR, "Error: -q:v qscale not available for encoder. Use -b:v bitrate instead.\n");
@@ -2289,7 +2304,7 @@ static int get_cv_pixel_info(
     const AVPixFmtDescriptor *desc = av_pix_fmt_desc_get(avctx->pix_fmt);
     VTEncContext *vtctx = avctx->priv_data;
     int av_format       = frame->format;
-    int av_color_range  = frame->color_range;
+    int av_color_range  = avctx->color_range;
     int i;
     int range_guessed;
     int status;
