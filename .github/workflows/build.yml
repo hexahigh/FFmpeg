@@ -98,6 +98,8 @@ jobs:
          libplacebo-dev \
          libsvtav1-dev
 
+    - name: uh
+      run: sudo apt install -y lib*
 
     - name: Build FFmpeg
       run: |
@@ -107,6 +109,7 @@ jobs:
         --enable-gpl \
         --disable-stripping \
         --enable-gnutls \
+        --enable-librav1e
         --enable-libaom \
         --enable-libass \
         --enable-libbluray \
