@@ -80,11 +80,18 @@ jobs:
               sha: context.sha
             })
 
+    - name: Delete old release and tag
+      uses: dev-drprasad/delete-tag-and-release@v1.0.1
+      with:
+        delete_release: true
+        tag_name: latest_auto
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+
     - name: Release to GitHub
       uses: ncipollo/release-action@v1
       with:
-        name: Autobuild $git_hash
-        tag: auto_$git_hash
+        name: Autobuild
+        tag: latest_auto
         commit: main
         body: ${{ github.event.head_commit.message }}
         artifacts: "/tmp/f_build/ffplay, /tmp/f_build/ffprove, /tmp/f_build/ffmpeg,"
