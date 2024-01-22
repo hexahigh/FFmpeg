@@ -62,12 +62,23 @@ jobs:
         --enable-libjxl \
         --enable-libx265 \
         --enable-libx264 \
-        --enable libvpx \
+        --enable-libvpx \
         --enable-libopus \
         --enable-libdav1d
         
         make
         sudo make install
+
+    - name: Create tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/auto_$git_hash',
+              sha: context.sha
+            })
 
     - name: Release to GitHub
       uses: ncipollo/release-action@v1
